@@ -82,7 +82,7 @@ def runConfig(cfg):
       print('INFO: debug set.')
 
    green = {'green_upper': green_upper, 'green_lower': green_lower}
-   calibration = {'green: green}
+   calibration = {'green': green}
 
    return os, camera, calibration, freqFrameNT, debug, search
 
