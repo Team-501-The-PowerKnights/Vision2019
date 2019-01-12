@@ -23,7 +23,7 @@ class stopwatch:
       return self.elapsed
 
 
-
+"""
 sw = stopwatch('test')
 sw.start()
 
@@ -38,3 +38,4 @@ timer = sw.get()
 timer2 = sw2.get()
 print('timers: %.3f, %.3f' % (timer,timer2)) 
 
+"""
