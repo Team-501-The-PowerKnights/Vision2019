@@ -35,8 +35,6 @@ def runConfig(cfg):
       freqFrameNT = int(config['framerate']['freqFrameNT'])
       debug = config['debug']['debug']
       search = config['search']['search']
-      vertx = int(config['vertices']['vertx'])
-      verty = int(config['vertices']['verty'])
    except:
       print("ERROR: config.ini does not contain correct parameters. see ./config.correct ")
       sys.exit(1)
