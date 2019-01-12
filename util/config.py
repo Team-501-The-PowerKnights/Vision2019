@@ -51,13 +51,16 @@ def runConfig(cfg):
       os = "Linux"
    if not camera:
       print("ERROR: camera configuration not present.")
-      die=1
+      die = 1
    sacrificial = None
    try:
       sacrificial = green_upper[2]
       sacrificial = green_lower[2]
    except IndexError:
       print("ERROR: calibration configuration incomplete.")
+      die = 1
+   except TypeError:
+      print("ERROR: calibration configuration incorrect.")
       die = 1
    if not sacrificial:
       die = 1
