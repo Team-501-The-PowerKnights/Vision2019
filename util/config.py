@@ -21,6 +21,13 @@ def runConfig(cfg):
        #except:
        #   print("ERROR: Unable to read config.ini Dying.")
        #   sys.exit(1)
+       os = None
+       camera = None
+       green_upper = None
+       green_lower = None
+       freqFrameNT = None
+       debug = None
+       search = None
    else:
        config = cfg
 
