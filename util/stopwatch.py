@@ -8,19 +8,19 @@ class stopwatch:
    """
 
    def __init__(self, name):
-      self.name = name
-      self.start_time = 0
-      self.get_time = 0
+       self.name = name
+       self.start_time = 0
+       self.get_time = 0
 
    def start(self):
-      self.start_time = time.time()
-      self.elapsed = 0
-      return self.elapsed
+       self.start_time = time.time()
+       self.elapsed = 0
+       return self.elapsed
 
    def get(self):
-      self.get_time = time.time()
-      self.elapsed = self.get_time - self.start_time
-      return self.elapsed
+       self.get_time = time.time()
+       self.elapsed = self.get_time - self.start_time
+       return self.elapsed
 
 
 """

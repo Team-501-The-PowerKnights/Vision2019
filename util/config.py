@@ -2,7 +2,7 @@ import sys
 import configparser
 
 
-def runConfig(cfg):
+def run_config(cfg):
    """
    reads a  configuration file (config.ini) in standard format.
    [header]
@@ -16,30 +16,26 @@ def runConfig(cfg):
 
    if cfg is None:
        print("INFO: reading configuration from config.ini")
-       #try:
        config.read('config.ini')
-       #except:
-       #   print("ERROR: Unable to read config.ini Dying.")
-       #   sys.exit(1)
        os = None
        camera = None
        green_upper = None
        green_lower = None
-       freqFrameNT = None
+       nt_update_frequency = None
        debug = None
        search = None
    else:
        config = cfg
 
    try:
-      os = config['os']['operatingSystem']
-      camera = config['camera']['cameraDevice']
+      os = config['os']['operating_system']
+      camera = config['camera']['camera_device']
       green_upper = config['mask']['green_upper']
       green_upper = list(map(int, green_upper.split(',')))
       # convert the config item into a list so that things don't blow up
       green_lower = config['mask']['green_lower']
       green_lower = list(map(int, green_lower.split(',')))
-      freqFrameNT = int(config['framerate']['freqFrameNT'])
+      nt_update_frequency = int(config['framerate']['nt_update_frequency'])
       debug = config['debug']['debug']
       search = config['search']['search']
    except:
@@ -48,7 +44,7 @@ def runConfig(cfg):
 
    if not os:
       print("INFO: os configuration not present")
-      os = "Linux"
+      os = "linux"
    if not camera:
       print("ERROR: camera configuration not present.")
       die = 1
@@ -64,9 +60,9 @@ def runConfig(cfg):
       die = 1
    if not sacrificial:
       die = 1
-   if not freqFrameNT:
+   if not nt_update_frequency:
       print("INFO: framerate not specified, using default of 10.")
-      freqFrameNT = 10
+      nt_update_frequency = 10
    if not debug:
       print("INFO: debug not specified, not debugging.")
    if not search:
@@ -94,7 +90,7 @@ def runConfig(cfg):
    green = {'green_upper': green_upper, 'green_lower': green_lower}
    calibration = {'green': green}
 
-   return os, camera, calibration, freqFrameNT, debug, search
+   return os, camera, calibration, nt_update_frequency, debug, search
 
 
 def write_cal(cal):
@@ -104,7 +100,7 @@ def write_cal(cal):
     config.set('mask', 'green_lower', ','.join(cal['green']['green_lower']))
 
     print('Validating configuration and writing to disk.')
-    runConfig(config)
+    run_config(config)
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
     return True
