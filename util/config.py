@@ -75,6 +75,10 @@ def run_config(cfg):
         print("INFO: debug not specified, not debugging.")
     if not search:
         print("INFO: search not specified, searching for targets.")
+    if not robot_ip:
+        print("WARNING: Robot IP address not specified. Using default.")
+        robot_ip = '10.5.1.2'
+
 
 
 
@@ -98,7 +102,7 @@ def run_config(cfg):
     green = {'green_upper': green_upper, 'green_lower': green_lower}
     calibration = {'green': green}
 
-    return os, camera, calibration, nt_update_frequency, debug, search
+    return os, camera, calibration, nt_update_frequency, debug, search, robot_ip
 
 
 def write_cal(cal):
