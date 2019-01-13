@@ -16,7 +16,11 @@ def run_config(cfg):
 
     if cfg is None:
         print("INFO: reading configuration from config.ini")
-        config.read('config.ini')
+        try:
+            config.read('config.ini')
+        except:
+            print('ERROR: unable to read config.ini. Dying.')
+            sys.exit(1)
         os = None
         camera = None
         green_upper = None
