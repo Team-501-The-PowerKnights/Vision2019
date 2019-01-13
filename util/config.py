@@ -12,15 +12,17 @@ def run_config(cfg):
     """
     config = configparser.ConfigParser()
 
-    die=0
+    die = 0
 
     if cfg is None:
         print("INFO: reading configuration from config.ini")
+        # changed below to "read_file" as we WANT it to throw an exception when the file does not exist
         try:
-            config.read('config.ini')
-        except:
-            print('ERROR: unable to read config.ini. Dying.')
-            sys.exit(1)
+            config.read_file(open('config.ini'))
+        except FileNotFoundError:
+            print('ERROR: config.ini not found.')
+            return
+
         os = None
         camera = None
         green_upper = None
@@ -28,6 +30,7 @@ def run_config(cfg):
         nt_update_frequency = None
         debug = None
         search = None
+        robot_ip = None
     else:
         config = cfg
 
@@ -42,12 +45,13 @@ def run_config(cfg):
         nt_update_frequency = int(config['framerate']['nt_update_frequency'])
         debug = config['debug']['debug']
         search = config['search']['search']
+        robot_ip = config['robot']['ip']
     except:
-        print("ERROR: config.ini does not contain correct parameters. see ./config.correct ")
+        print("WARNING: config.ini does not contain correct parameters. see ./config.correct ")
         # sys.exit(1)
 
     if not os:
-        print("INFO: os configuration not present")
+        print("INFO: os configuration not present, using defaults.")
         os = "linux"
     if not camera:
         print("ERROR: camera configuration not present.")

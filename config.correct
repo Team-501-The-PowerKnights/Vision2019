@@ -11,3 +11,5 @@ nt_update_frequency = 10
 debug = 0
 [search]
 search = 1
+[robot]
+ip = 10.5.1.2

@@ -1,12 +1,12 @@
 from util.stopwatch import stopwatch
 from util.config import run_config
+import sys
 
 sw=stopwatch('sw')
 sw.start()
-try:
-    config = run_config(None)
-except:
-    print('ERROR: unable to read configuration.')
-print('INFO: ' + str(config))
+config = run_config(None)
+
+if config:
+    print('INFO: ' + str(config))
 timer = sw.get()
 print('INFO: stopwatch: %.3f' % timer)
