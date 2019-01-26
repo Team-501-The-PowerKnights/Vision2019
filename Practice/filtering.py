@@ -28,7 +28,7 @@ while cap.isOpened:
     cv2.imshow('dilated', dilated)
     fps = 1.0 / timer.get()
     print('frames per second: %.3f' % fps)
-    cv2.putText(frame, str(fps), (20,20), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,255,255), thickness=1, lineType=2)
+    cv2.putText(frame, str(fps), (20,20), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=2, color=(255,255,255), thickness=1, lineType=2)
     cv2.imshow('raw video', frame)
 
 
