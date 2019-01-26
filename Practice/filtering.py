@@ -25,6 +25,7 @@ while cap.isOpened:
 
     hsvup = np.array([186, 209, 142])
     hsvlow = np.array([162, 70, 41])
+
     mask = cv2.inRange(frame, hsvlow, hsvup)
     cv2.imshow('mask', mask)
 
