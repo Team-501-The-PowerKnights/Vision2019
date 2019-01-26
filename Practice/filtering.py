@@ -1,9 +1,18 @@
-# Only works with mac currently see comment on line
 import cv2
 import numpy as np
 from util.stopwatch import stopwatch as SW
 
-cap = cv2.VideoCapture(0)  # Need to change the 0 to what ever the camera devices name is
+
+"""
+filtering.py
+
+examples of basic vision processing in FRC
+
+
+VideoCapture device needs to be changed to reflect local system.
+"""
+
+cap = cv2.VideoCapture(0)
 timer = SW('timer')
 
 
