@@ -7,6 +7,14 @@ from collections import namedtuple
 
 """
 telemetry push system 
+
+****
+ONLY WORKS ON LINUX, DO NOT EVEN BOTHER TRYING ON MAC OR WINDOWS.
+****
+
+
+
+
 """
 
 ROBOT = 'roborio-501-frc.local'  # set robot name
