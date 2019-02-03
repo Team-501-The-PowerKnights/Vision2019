@@ -1,4 +1,4 @@
-from util.stopwatch import stopwatch as SW
+from stopwatch import stopwatch as SW
 import os
 import sys
 from networktables import NetworkTables as NT
@@ -19,6 +19,8 @@ ONLY WORKS ON LINUX, DO NOT EVEN BOTHER TRYING ON MAC OR WINDOWS.
 
 ROBOT = 'roborio-501-frc.local'  # set robot name
 ROBOT_IP = socket.gethostbyname(ROBOT)  # determine robot IP
+
+print('robot IP address: %s' % ROBOT_IP)
 
 with open('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq') as f:  # read CPU frequency
     cpu_freq = int(f.read())
