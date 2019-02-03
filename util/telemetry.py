@@ -30,6 +30,16 @@ MHz = int(cpu_freq / 1000.0)
 clock_speed = str(MHz) + ' MHz'
 print(clock_speed)
 
+# /sys/class/thermal/thermal_zone0/temp
+
+with open('/sys/class/thermal/thermal_zone0/temp') as f:  # read SOC temperature
+    soc_temp = int(f.read())
+f.closed
+
+soc_temp = str(int(soc_temp / 1000)) + 'C'
+print(soc_temp)
+
+
 
 
 
