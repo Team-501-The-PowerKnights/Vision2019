@@ -36,7 +36,7 @@ with open('/sys/class/thermal/thermal_zone0/temp') as f:  # read SOC temperature
     soc_temp = int(f.read())
 f.closed
 
-soc_temp = str(int(soc_temp / 1000)) + 'C'
+soc_temp = str(int(soc_temp / 1000)) + ' C'
 print(soc_temp)
 
 
