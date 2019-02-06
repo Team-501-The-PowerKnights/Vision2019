@@ -1,23 +1,22 @@
-from stopwatch import stopwatch as SW
-import os
-import sys
 from networktables import NetworkTables as NT
 import socket
 from collections import namedtuple
 import time
 
 """
-telemetry push system 
-
+Telemetry Push Subsystem 
 ****
-ONLY WORKS ON LINUX, DO NOT EVEN BOTHER TRYING ON MAC OR WINDOWS.
+ONLY WORKS ON LINUX
 ****
-
-
-
-
-
+Provides the following information to the Driver Station:
+- SOC Temperature (thermal_zone0)
+- CPU Frequency
+- Free Memory
 """
+
+
+sleep_time = 0.200  # time to wait between sending updates
+
 
 def main():
     table = telemetry_init()
@@ -27,29 +26,26 @@ def main():
 def telemetry_init():
     ROBOT = 'roborio-501-frc.local'  # set robot name
     ROBOT_IP = socket.gethostbyname(ROBOT)  # determine robot IP
-    print('connecting to roborio at %s' % ROBOT_IP)
+    nt_init = False
 
-    try:
-        NT.initialize(server=ROBOT_IP)
-        init = True
-    except:
-        print("Unable to initialize network tables.")
-        init = False
-    try:
-        vision_table = NT.getTable('SmartDashboard')
-    except:
-        print("unable to get vision table")
-        NT.stop()
-        NT.destroy()
-        init = False
-    if not init:
-        time.sleep(1)
-        print("retrying networktables initialization.")
-    else:
-        print("vision table acquired")
+    while not nt_init:
+        try:
+            NT.initialize(server=ROBOT_IP)  # initialize client
+        except:
+            continue
+        try:
+            vision_table = NT.getTable('SmartDashboard')
+        except:
+            NT.stop()
+            NT.destroy()
+            continue
         vision_table.putBoolean('connected', True)
         pullback = vision_table.getBoolean('connected', None)
-        print('pullback: %r' % pullback)
+        if pullback:
+            nt_init = True
+        else:
+            continue
+    else:
         return vision_table
 
 def telemetry_run(vision_table):
@@ -60,14 +56,14 @@ def telemetry_run(vision_table):
         MHz = int(cpu_freq / 1000.0)
         clock_speed = str(MHz) + ' MHz'
         print(clock_speed)
-        vision_table.putString('RPI/Clock Speed', clock_speed)
+        vision_table.putString('RPI/clock_speed', clock_speed)
 
         with open('/sys/class/thermal/thermal_zone0/temp') as f:  # read SOC temperature
             soc_temp = int(f.read())
         f.closed
         soc_temp = str(int(soc_temp / 1000)) + ' C'
         print(soc_temp)
-        vision_table.putString('RPI/SOC Temp', soc_temp)
+        vision_table.putString('RPI/soc_temp', soc_temp)
 
         MemInfoEntry = namedtuple('MemInfoEntry', ['value', 'unit'])  # gets memory information
         mem_info = {}
@@ -77,12 +73,12 @@ def telemetry_run(vision_table):
                 mem_info[key.rstrip(':')] = MemInfoEntry(value, unit)
         free_memory = str(int(int(mem_info['MemFree'][0]) / 1000 )) + ' MB'
         print(free_memory)
-        vision_table.putString('RPI/Free Memory', free_memory)
+        vision_table.putString('RPI/free_memory', free_memory)
 
 
         # print(mem_info['SwapFree'][0])
         # print(mem_info['SwapTotal'][0])
-        time.sleep(0.100)
+        time.sleep(sleep_time)
 
 if __name__ == "__main__":
     # execute only if run as a script
