@@ -11,3 +11,4 @@ v4l2-ctl --set-ctrl exposure_absolute=15
 # disable auto white-balance, set to 5000K
 v4l2-ctl --set-ctrl white_balance_temperature_auto=0
 v4l2-ctl --set-ctrl white_balance_temperature=5000
+echo "done"
