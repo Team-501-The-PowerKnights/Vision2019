@@ -14,6 +14,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 os, camera_location, calibration, freqFramesNT, vertx, verty = runConfig(None)
 
+# Vision.angle (double)
+# Vision.locked (boolean)
+# Vision.count (integer)
 
 
 
