@@ -8,7 +8,8 @@ import socket
 
 def main():
     global timer
-    timer = SW.start('timer')
+    timer = SW('timer')
+    timer.start()
     nt = init_nt()
     cam = init_cv()
     loop(cam, nt)
@@ -30,10 +31,11 @@ def init_nt():
             NT.stop()
             NT.destroy()
             continue
-        vision_table.putBoolean('Vision.connected', True)
-        pullback = vision_table.getBoolean('Vision.connected', None)
+        vision_table.putBoolean('Vision.pullback', True)
+        pullback = vision_table.getBoolean('Vision.pullback', None)
         if pullback:
             nt_init = True
+            # print('networktables init')
         else:
             continue
     else:
@@ -44,6 +46,7 @@ def init_cv():
     try:
         cam = cv2.VideoCapture(0)
         time.sleep(1)
+        # print('camera init.')
     except:
         print("Exception on VideoCapture init. Dying")
         sys.exit()
@@ -52,23 +55,25 @@ def init_cv():
 
 def loop(camera, network_table):
     while camera.isOpened():
-        pose = network_table.getBoolean('Robot.strikingAPose')
-        arm = network_table.getBoolean('Arm.inMotion')
-        wrist = network_table.getBoolean('Wrist.inMotion')
-        elbow = network_table.getBoolean('Elbow.inMotion')
+        # print('camera opened')
+        pose = network_table.getBoolean('Robot.strikingAPose', None)
+        arm = network_table.getBoolean('Arm.inMotion', None)
+        wrist = network_table.getBoolean('Wrist.inMotion', None)
+        elbow = network_table.getBoolean('Elbow.inMotion', None)
         if pose or arm or wrist or elbow:
             ret, frame = camera.read()
             if ret:
                 current_time = timer.get()
-                formatted_time = "{%.3f}".format(current_time)
-                filename = "live_match"+formatted_time+".jpg"
+                formatted_time = "%.3f" % (current_time)
+                filename = "/home/linaro/match_images/live_match"+formatted_time+".jpg"
                 cv2.imwrite(filename, frame)
-                time.sleep(0.100)
+                time.sleep(0.133)
             else:
-                time.sleep(0.100)
+                time.sleep(0.133)
                 continue
         else:
-            time.sleep(0.100)
+            time.sleep(0.133)
+            # print('nothing active')
 
 
 if __name__ == "__main__":
