@@ -26,5 +26,5 @@ def findValids(img_orig, calibration, rect_cnt):
     # Clean up mask with dilate and erode and threshold
     # if debug: write original frame, original mask, eroded and dilated mask, and mask threshold
     # if search: call findValidTarget
-    # if valid: update validUpdate, find center of each target, find angle to target, find distance to target
+    # if valid: update validUpdate, find angle to target, find distance to target
     pass

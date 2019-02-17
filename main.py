@@ -44,7 +44,8 @@ def create_rect():
     """
     Creates a rectangle and performs appropriate processing to provide a target
     returns the contour object of the rectangle
-    :return contour of the rectangle we want to validate targets against
+    :return the two contours of the rectangle we want to validate targets
+    against (returned as a tuple)
     """
     pass
 
