@@ -35,7 +35,6 @@ def init_nt():
         pullback = vision_table.getBoolean('Vision.pullback', None)
         if pullback:
             nt_init = True
-            # print('networktables init')
         else:
             continue
     else:
@@ -44,7 +43,7 @@ def init_nt():
 
 def init_cv():
     try:
-        cam = cv2.VideoCapture(0)
+        cam = cv2.VideoCapture('http://tinkerboard.local:1180/?action=stream?dummy=param.mjpg')
         time.sleep(1)
         # print('camera init.')
     except:
@@ -55,7 +54,6 @@ def init_cv():
 
 def loop(camera, network_table):
     while camera.isOpened():
-        # print('camera opened')
         pose = network_table.getBoolean('Robot.strikingAPose', None)
         arm = network_table.getBoolean('Arm.inMotion', None)
         wrist = network_table.getBoolean('Wrist.inMotion', None)
@@ -73,7 +71,6 @@ def loop(camera, network_table):
                 continue
         else:
             time.sleep(0.133)
-            # print('nothing active')
 
 
 if __name__ == "__main__":
