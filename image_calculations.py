@@ -22,8 +22,8 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    M = cv2.moments(cnt)
-    return M
+    m = cv2.moments(cnt)
+    return m
 
 
 
