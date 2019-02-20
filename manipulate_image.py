@@ -1,7 +1,11 @@
 """
 Created on Tues Feb 19 08:40:34 2019
- 
-@author: Matt-Gleich
+
+@author: Matt-Gleich & dithier
+
+Inputs: image
+
+Outputs: erosion_and_dilation, img_line, and crosshairs
 """
 import cv2
 import numpy as np
@@ -28,8 +32,8 @@ def erodeAndDilate(img):
     :return: and eroded and dilated image
     """
     erosion = cv2.erode(img, kernel, iterations=1)
-    dilation = cv2.dilate(erosion, kernel, iterations=1)
-    return dilation
+    erosion_and_dilation = cv2.dilate(erosion, kernel, iterations=1)
+    return erosion_and_dilation
 
 
 def drawLine2Target(img, cx, cy):
@@ -51,5 +55,5 @@ def drawCrossHairs(img):
     :return: an image with crosshairs drawn
     """
     line_one = cv2.line(img, (0, 0), (320, 240), (0, 0, 255), 2)
-    line_two = cv2.line(line_one, (0, 240), (320, 0), (0, 0, 255), 2)
-    return line_two
+    crosshairs = cv2.line(line_one, (0, 240), (320, 0), (0, 0, 255), 2)
+    return crosshairs
