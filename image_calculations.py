@@ -13,7 +13,6 @@ def findAngle(image, cx1, cx2):
         angle -> float
 
     This function finds the robot's angle relative to the center of the target
-
     """
     pass
 
@@ -23,7 +22,8 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    pass
+    M = cv2.moments(cnt)
+    return M
 
 
 
