@@ -3,7 +3,7 @@
 FRC Team 501 2019 Python Vision Suite
 
 Pre-requisite Tasks:
-- Installing Python3 and OpenVC4 on your Pi
+- Installing Python3 and openCV on your Pi
 https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/
 
 
