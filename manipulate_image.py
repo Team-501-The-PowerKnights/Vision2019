@@ -1,9 +1,10 @@
 import cv2
 import numpy as np
+kernel = np.ones((5, 5), np.unit8)
+# Image resolution is 320x240
 
 def bestFitRect(img_orig, cnt):
     """
-
     :param img_orig: the image frame being analyzed
     :param cnt: the contour of the potential target
     :return: corners of the rectangle
@@ -21,10 +22,12 @@ def erodeAndDilate(img):
     :param img: the image frame mask being analyzed
     :return: and eroded and dilated image
     """
-    pass
+    erosion = cv2.erode(img, kernel, iterations=1)
+    dilation = cv2.dilate(erosion, kernel, iterations=1)
+    return dilation
 
 
-def drawLine2Target(image, cx, cy):
+def drawLine2Target(img, cx, cy):
     """
     Draws a line from the center of the camera point of view to the center of the target
     :param image: the original frame
@@ -32,13 +35,16 @@ def drawLine2Target(image, cx, cy):
     :param cy: y coordinate of target center
     :return: image with a line drawn to target
     """
-    pass
+    img_line = cv2.line(img, (160, 120), (cx, cy), (255, 0, 0), 2)
+    return img_line
 
 
-def drawCrossHairs(image):
+def drawCrossHairs(img):
     """
     Draws crosshairs in image donating the center of the camera view
     :param image: the image being analyzed
     :return: an image with crosshairs drawn
     """
-    pass
+    line_one = cv2.line(img, (0, 0), (320, 240), (0, 0, 255), 2)
+    line_two = cv2.line(line_one, (0, 240), (320, 0), (0, 0, 255), 2)
+    return line_two
