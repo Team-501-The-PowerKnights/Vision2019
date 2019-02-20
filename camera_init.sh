@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # init video stream
-mjpg_streamer -b -o "output_http.so -w ./www -p 1180" -i "input_uvc.so -d /dev/video0 -f 30 -r 640x480 -n"
+mjpg_streamer -b -o "output_http.so -w ./www -p 1180" -i "input_uvc.so -d /dev/video0 -f 30 -r 320x240 -n"
 sleep 2
 
 # turns off auto-exposure
