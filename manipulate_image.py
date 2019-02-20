@@ -6,11 +6,13 @@ Created on Tues Feb 19 08:40:34 2019
 Inputs: image
 
 Outputs: erosion_and_dilation, img_line, and crosshairs
+
+Other important info:
+Image resolution is 320x240
 """
 import cv2
 import numpy as np
 kernel = np.ones((5, 5), np.unit8)
-# Image resolution is 320x240
 
 def bestFitRect(img_orig, cnt):
     """
@@ -54,6 +56,8 @@ def drawCrossHairs(img):
     :param image: the image being analyzed
     :return: an image with crosshairs drawn
     """
-    line_one = cv2.line(img, (0, 0), (320, 240), (0, 0, 255), 2)
-    crosshairs = cv2.line(line_one, (0, 240), (320, 0), (0, 0, 255), 2)
+    top_hair = cv2.line(img, (160, 130), (160, 150), (0, 0, 255), 3)
+    bottom_hair = cv2.line(top_hair, (160, 110), (160, 90), (0, 0, 255), 3)
+    left_hair = cv2.line(bottom_hair, (150, 120), (120, 120), (0, 0, 255), 3)
+    crosshairs = cv2.line(left_hair, (170, 130), (190, 120), (0, 0, 255), 3)
     return crosshairs
