@@ -1,4 +1,4 @@
-# Only works with mac currently see comment on line
+# Only works with mac and Windows 10 currently see comment on line 6 for more instructions
 import cv2
 import numpy as np
 from util.stopwatch import stopwatch as SW
