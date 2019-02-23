@@ -8,7 +8,7 @@ Inputs: image
 Outputs: erosion_and_dilation, img_line, and crosshairs
 
 Other important info:
-Image resolution is 320x240
+You need to change the camera resolution from 320x240 to you camera's res
 """
 import cv2
 import numpy as np
