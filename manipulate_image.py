@@ -3,10 +3,6 @@ Created on Tues Feb 19 08:40:34 2019
 
 @author: Matt-Gleich & dithier
 
-Inputs: image
-
-Outputs: erosion_and_dilation, img_line, and crosshairs
-
 Other important info:
 You need to change the camera resolution from 320x240 to you camera's res
 """
