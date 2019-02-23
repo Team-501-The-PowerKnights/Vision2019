@@ -2,19 +2,25 @@ import cv2
 import math
 from collections import Counter
 
+camera_res = [320, 240]
+camera_degree = 60
 
 def findAngle(image, cx1, cx2):
     """
     Input:
         image
-        cx1 -> float center coordinate of first rectangle
-        cx2 -> float center coordinate of second rectangle.
+        cx1 -> float center coordinates of first rectangle
+        cx2 -> float center coordinates of second rectangle
     Output:
         angle -> float
 
     This function finds the robot's angle relative to the center of the target
     """
-    pass
+    pixel_along_diagoal = sqrt(camera_res[0] ** 2 + camera_res[1] ** 2)
+    pixel = camera_degree/pixel_along_diagoal
+    dis_from_center = sqrt((cx1[0] - cx1[1]) ** 2 + (cx2[0] - cx[1]) ** 2)
+    angle_from_cnt = pixel * dis_from_center
+    return angle_from_cnt
 
 def findCenter(cnt):
     """
@@ -59,7 +65,7 @@ def organizeCorners(corners):
 
     ''' There are three different cases that need to be considered: 1) There are no repeats in the x coordinates
     meaning that you may have an array like [100, 200, 105, 202]  2) There is one repeat in the x coordinates such as
-    [100, 100, 200, 202]  3) There are two repeats in the x coordinates such as [100, 200, 100, 200]. The number of 
+    [100, 100, 200, 202]  3) There are two repeats in the x coordinates such as [100, 200, 100, 200]. The number of
     duplicates determines the methods to be used to determine the order of the coordinates. This is done below
     '''
     # Check for duplicate and find value
