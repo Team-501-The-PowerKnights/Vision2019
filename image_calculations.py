@@ -1,3 +1,11 @@
+"""
+Created on Tues Feb 19 08:40:34 2019
+
+@author: Matt-Gleich & dithier
+
+Other important info:
+Update camera_res on line 13 and FOV on 14
+"""
 import cv2
 import math
 from collections import Counter
