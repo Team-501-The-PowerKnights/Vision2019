@@ -11,7 +11,7 @@ import math
 from collections import Counter
 
 camera_res = [320, 240]
-camera_degree = 60
+camera_FOV = 60
 
 def findAngle(image, cx1, cx2):
     """
