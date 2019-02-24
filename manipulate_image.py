@@ -10,18 +10,6 @@ import cv2
 import numpy as np
 kernel = np.ones((5, 5), np.unit8)
 
-def bestFitRect(img_orig, cnt):
-    """
-    :param img_orig: the image frame being analyzed
-    :param cnt: the contour of the potential target
-    :return: corners of the rectangle
-            original image with BFR and corners drawn on it
-    """
-    # Find convex hull
-    # Create black image, draw rectangle hull on it, corner detection
-    # Find coordinates for the four corners
-    # Load original image and draw BFR and corners
-    pass
 
 def erodeAndDilate(img):
     """
