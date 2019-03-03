@@ -30,18 +30,35 @@ def drawLine2Target(img, cx, cy):
     :param cy: y coordinate of target center
     :return: image with a line drawn to target
     """
-    img_line = cv2.line(img, (160, 120), (cx, cy), (255, 0, 0), 2)
+    dimensions = img.shape
+    centery = dimensions[0] / 2
+    centerx = dimensions[1] / 2
+    img_line = cv2.line(img, (centery, centerx), (cx, cy), (255, 0, 0), 2)
     return img_line
 
 
 def drawCrossHairs(img):
     """
-    Draws crosshairs in image donating the center of the camera view
-    :param image: the image being analyzed
-    :return: an image with crosshairs drawn
+    Draws cross-hairs in image donating the center of the camera view
+    :param img: the image being analyzed
+    :return: an image with cross-hairs drawn
     """
-    top_hair = cv2.line(img, (160, 130), (160, 150), (0, 0, 255), 3)
-    bottom_hair = cv2.line(top_hair, (160, 110), (160, 90), (0, 0, 255), 3)
-    left_hair = cv2.line(bottom_hair, (150, 120), (120, 120), (0, 0, 255), 3)
-    crosshairs = cv2.line(left_hair, (170, 130), (190, 120), (0, 0, 255), 3)
+    dimensions = img.shape
+    centery = int(dimensions[0] / 2)
+    print(centery)
+    centerx = int(dimensions[1] / 2)
+    print(centerx)
+    centerx10 = centerx + 10
+    centerx30 = centerx + 30
+    centerxmin10 = centerx - 10
+    centerxmin30 = centerx - 30
+    centery10 = centery + 10
+    centery30 = centery + 30
+    centerymin10 = centery - 10
+    centerymin30 = centery - 30
+    red = (0, 0, 255)
+    top_hair = cv2.line(img, (centerx, centerymin10), (centerx, centerymin30), red, 2)
+    bottom_hair = cv2.line(top_hair, (centerx, centery10), (centerx, centery30), red, 2)
+    left_hair = cv2.line(bottom_hair, (centerxmin10, centery), (centerxmin30, centery), red, 2)
+    crosshairs = cv2.line(left_hair, (centerx10, centery), (centerx30, centery), red, 2)
     return crosshairs
