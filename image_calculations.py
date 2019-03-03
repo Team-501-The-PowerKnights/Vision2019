@@ -17,18 +17,24 @@ def findAngle(image, cx1, cx2):
     """
     Input:
         image
-        cx1 -> float center coordinates of first rectangle
-        cx2 -> float center coordinates of second rectangle
+        cx1 -> float center coordinate of first rectangle
+        cx2 -> float center coordinate of second rectangle
     Output:
         angle -> float
 
     This function finds the robot's angle relative to the center of the target
     """
-    pixel_along_diagoal = sqrt(camera_res[0] ** 2 + camera_res[1] ** 2)
-    pixel = camera_degree/pixel_along_diagoal
-    dis_from_center = sqrt((cx1[0] - cx1[1]) ** 2 + (cx2[0] - cx[1]) ** 2)
-    angle_from_cnt = pixel * dis_from_center
-    return angle_from_cnt
+    cx = (cx1 + cx2) / 2
+    dimensions = img.shape
+    h = dimensions[0]
+    width = dimensions[1]
+    channels = dimensions[2]
+    offset = (width / 2) - cx
+    angle = (camera_FOV * (offset / width))
+    return angle
+
+image = '/Users/matthewgleich/Desktop/First/CV2_Test_Images/Solid_Red_Sized__25214.1507754519.jpg'
+print(findAngle([]))
 
 def findCenter(cnt):
     """
