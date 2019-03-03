@@ -22,33 +22,25 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     """
     angle = 1000
     valid_update = False
-    # Take a copy of image
-    # Find upper bound and lower bound
-    # Convert copy from BGR to HSV
-    # Make a mask
-    # Copy the mask
-    # Erode and dilate the mask
-    # Copy it again
-    # Take a threshold (Arguments: ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
-
-    # If in Debug mode:
-    # Write original image to file
-    # Write the orginal mask on file
-    # Write the eroded and dilated mask to file
-    # Write the mask threshold to file
-
+    img_copy = np.copy(img_orig)
+    lower_bound = calibration["green_lower"]
+    upper_bound = calibration["green_upper"]
+    HSV_ofCopy = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
+    mask = cv2.inrange(hsv, lower_bound, upper_bound)
+    mask_copy = np.copy(mask)
+    ErodeandDilate = MI.erodeAndDilate(mask_copy)
+    mask_copy2 = np.copy(mask_copy)
+    ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
+    if debug:
+        cv2.imwrite("ImageOrignial.png", img_orig)
+        cv2.imwrite("ImageOrignialMask.png", mask)
+        cv2.imwrite("ImageOrignialErodeandDilated.png", ErodeandDilate)
+        cv2.imwrite("ImageOrignialMaskThreshold.png", mask_thresh)
     if search:
-        valid, cnt = VT.findValidTarget(img, mask, rect_cnt1, rect_cnt2)
+        valid, cnt = VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
         if valid:
             valid_update = True
-            # find centers of both contours
-            # Find angle offset
+            cnt1_center = MI.findCenter(rect_cnt1)
+            cnt2_center = MI.findCenter(rect_cnt2)
+            angle = MI.findAngle(img_orig, cnt1_center, cnt2_center)
     return angle, valid_update
-
-    # initialize variables
-    # convert image into HSV
-    # create mask with lower and upper hsv bounds
-    # Clean up mask with dilate and erode and threshold
-    # if debug: write original frame, original mask, eroded and dilated mask, and mask threshold
-    # if search: call findValidTarget
-    # if valid: update validUpdate, find angle to target, find distance to target
