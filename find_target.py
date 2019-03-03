@@ -5,7 +5,7 @@ import image_calculations as CI
 import validate_target as VT
 
 
-def findValids(img_orig, calibration, rect_cnt):
+def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     """
     Input: image from camera, calibration information, contours from generated rectangle
     Output:
@@ -20,6 +20,31 @@ def findValids(img_orig, calibration, rect_cnt):
     finds valid targets comparing to the rectangle contours, calculates the angle to target center,
     and provides graphical representations for future use.
     """
+    angle = 1000
+    valid_update = False
+    # Take a copy of image
+    # Find upper bound and lower bound
+    # Convert copy from BGR to HSV
+    # Make a mask
+    # Copy the mask
+    # Erode and dilate the mask
+    # Copy it again
+    # Take a threshold (Arguments: ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
+
+    # If in Debug mode:
+    # Write original image to file
+    # Write the orginal mask on file
+    # Write the eroded and dilated mask to file
+    # Write the mask threshold to file
+
+    if search:
+        valid, cnt = VT.findValidTarget(img, mask, rect_cnt1, rect_cnt2)
+        if valid:
+            valid_update = True
+            # find centers of both contours
+            # Find angle offset
+    return angle, valid_update
+
     # initialize variables
     # convert image into HSV
     # create mask with lower and upper hsv bounds
@@ -27,4 +52,3 @@ def findValids(img_orig, calibration, rect_cnt):
     # if debug: write original frame, original mask, eroded and dilated mask, and mask threshold
     # if search: call findValidTarget
     # if valid: update validUpdate, find angle to target, find distance to target
-    pass
