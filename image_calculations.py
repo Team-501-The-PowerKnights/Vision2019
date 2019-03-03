@@ -11,7 +11,6 @@ import math
 from collections import Counter
 
 camera_res = [320, 240]
-camera_FOV = 60
 
 def findAngle(image, cx1, cx2):
     """
@@ -24,6 +23,7 @@ def findAngle(image, cx1, cx2):
 
     This function finds the robot's angle relative to the center of the target
     """
+    camera_FOV = 49.6
     cx = (cx1 + cx2) / 2
     dimensions = img.shape
     h = dimensions[0]
@@ -42,8 +42,10 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    m = cv2.moments(cnt)
-    return m
+    M = cv2.moments(c)
+	cX = int(M["m10"] / M["m00"])
+	cY = int(M["m01"] / M["m00"])
+    return cX, cY
 
 
 
