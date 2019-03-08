@@ -1,21 +1,40 @@
+"""
+Created on Tues Feb 19 08:40:34 2019
+
+@author: Matt-Gleich & dithier
+
+Other important info:
+Update camera_res on line 13 and FOV on 14
+"""
 import cv2
 import math
 from collections import Counter
 
+camera_res = [320, 240]
 
 def findAngle(image, cx1, cx2):
     """
     Input:
         image
         cx1 -> float center coordinate of first rectangle
-        cx2 -> float center coordinate of second rectangle.
+        cx2 -> float center coordinate of second rectangle
     Output:
         angle -> float
 
     This function finds the robot's angle relative to the center of the target
-
     """
-    pass
+    camera_FOV = 49.6
+    cx = (cx1 + cx2) / 2
+    dimensions = img.shape
+    h = dimensions[0]
+    width = dimensions[1]
+    channels = dimensions[2]
+    offset = (width / 2) - cx
+    angle = (camera_FOV * (offset / width))
+    return angle
+
+image = '/Users/matthewgleich/Desktop/First/CV2_Test_Images/Solid_Red_Sized__25214.1507754519.jpg'
+print(findAngle([]))
 
 def findCenter(cnt):
     """
@@ -23,7 +42,10 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    pass
+    M = cv2.moments(c)
+	cX = int(M["m10"] / M["m00"])
+	cY = int(M["m01"] / M["m00"])
+    return cX, cY
 
 
 
@@ -59,7 +81,7 @@ def organizeCorners(corners):
 
     ''' There are three different cases that need to be considered: 1) There are no repeats in the x coordinates
     meaning that you may have an array like [100, 200, 105, 202]  2) There is one repeat in the x coordinates such as
-    [100, 100, 200, 202]  3) There are two repeats in the x coordinates such as [100, 200, 100, 200]. The number of 
+    [100, 100, 200, 202]  3) There are two repeats in the x coordinates such as [100, 200, 100, 200]. The number of
     duplicates determines the methods to be used to determine the order of the coordinates. This is done below
     '''
     # Check for duplicate and find value
