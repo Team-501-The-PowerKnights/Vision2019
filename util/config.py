@@ -46,9 +46,11 @@ def run_config(cfg):
         debug = config['debug']['debug']
         search = config['search']['search']
         robot_ip = config['robot']['ip']
-    except:
-        print("WARNING: config.ini does not contain correct parameters. see ./config.correct ")
-        # sys.exit(1)
+    except configparser.NoSectionError:
+        print("WARNING: config.ini does not contain correct [sections] . see config.correct ")
+    except configparser.NoOptionError:
+        print("WARNING: config.ini does not contain correct options. see config.correct ")
+
 
     if not os:
         print("INFO: os configuration not present, using defaults.")
@@ -78,10 +80,6 @@ def run_config(cfg):
     if not robot_ip:
         print("WARNING: Robot IP address not specified. Using default.")
         robot_ip = '10.5.1.2'
-
-
-
-
 
     if die > 0:
         print("FATAL ERROR: unable to load vision configuration. Exiting.")
