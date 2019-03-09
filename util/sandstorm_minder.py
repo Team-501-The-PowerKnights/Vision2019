@@ -46,13 +46,13 @@ def nt_init(robot_address):
 
 
 def sandstorm(vision_table):
-    is_sandstorm = vision_table.getBoolean('Vision.isSandstorm')
+    vision_on = False
+    while not vision_on:
+        is_sandstorm = vision_table.getBoolean('Vision.isSandstorm')
+        if not is_sandstorm:
+            break
 
-    if is_sandstorm:
-        pass
-    else:
-        subprocess.call(['./camera_teleop.sh'])
-
+    subprocess.call(['./camera_teleop.sh'])
 
 if __name__ == "__main__":
     # execute only if run as a script
