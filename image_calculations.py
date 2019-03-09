@@ -12,6 +12,7 @@ from collections import Counter
 
 camera_res = [320, 240]
 
+
 def findAngle(image, cx1, cx2):
     """
     Input:
@@ -33,8 +34,6 @@ def findAngle(image, cx1, cx2):
     angle = (camera_FOV * (offset / width))
     return angle
 
-image = '/Users/matthewgleich/Desktop/First/CV2_Test_Images/Solid_Red_Sized__25214.1507754519.jpg'
-print(findAngle([]))
 
 def findCenter(cnt):
     """
@@ -43,10 +42,9 @@ def findCenter(cnt):
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
     M = cv2.moments(c)
-	cX = int(M["m10"] / M["m00"])
-	cY = int(M["m01"] / M["m00"])
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
     return cX, cY
-
 
 
 def organizeCorners(corners):
@@ -85,8 +83,10 @@ def organizeCorners(corners):
     duplicates determines the methods to be used to determine the order of the coordinates. This is done below
     '''
     # Check for duplicate and find value
-    duplicate = (len(x) != len(set(x)))  # returns True of False on whether there is a duplicate in the x array
-    c = Counter(x).items()  # gives array listing the numbers in the array and how many times they occur
+    # returns True of False on whether there is a duplicate in the x array
+    duplicate = (len(x) != len(set(x)))
+    # gives array listing the numbers in the array and how many times they occur
+    c = Counter(x).items()
     c = list(c)
     doubleVal = []  # this list keeps track of the VALUES of the x coordinates that are repeated. It will be empty if there are no repeats
     if len(c) == 2:  # there are two repeats in the x coordinates
