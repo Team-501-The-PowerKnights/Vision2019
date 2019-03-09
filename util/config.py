@@ -34,24 +34,25 @@ def run_config(cfg):
     else:
         config = cfg
 
-    try:
+    try:  # unless cast below, all config options are strings
         os = config['os']['operating_system']
         camera = config['camera']['camera_device']
         green_upper = config['mask']['green_upper']
         green_upper = list(map(int, green_upper.split(',')))
-        # convert the config item into a list so that things don't blow up
         green_lower = config['mask']['green_lower']
         green_lower = list(map(int, green_lower.split(',')))
         nt_update_frequency = int(config['framerate']['nt_update_frequency'])
         debug = config['debug']['debug']
         search = config['search']['search']
         robot_ip = config['robot']['ip']
-    except:
-        print("WARNING: config.ini does not contain correct parameters. see ./config.correct ")
-        # sys.exit(1)
+    except configparser.NoSectionError:
+        print("WARNING: config.ini does not contain correct [sections] . see config.correct ")
+    except configparser.NoOptionError:
+        print("WARNING: config.ini does not contain correct options. see config.correct ")
+
 
     if not os:
-        print("INFO: os configuration not present, using defaults.")
+        print("INFO: Host OS configuration not present, using \'linux\'. ")
         os = "linux"
     if not camera:
         print("ERROR: camera configuration not present.")
@@ -61,10 +62,10 @@ def run_config(cfg):
         sacrificial = green_upper[2]
         sacrificial = green_lower[2]
     except IndexError:
-        print("ERROR: calibration configuration incomplete.")
+        print("ERROR: calibration sets must have three fields.")
         die = 1
     except TypeError:
-        print("ERROR: calibration configuration incorrect.")
+        print("ERROR: calibration configuration must only contain integers.")
         die = 1
     if not sacrificial:
         die = 1
@@ -72,19 +73,15 @@ def run_config(cfg):
         print("INFO: framerate not specified, using default of 10.")
         nt_update_frequency = 10
     if not debug:
-        print("INFO: debug not specified, not debugging.")
+        print("INFO: \'debug\' not specified, not debugging.")
     if not search:
-        print("INFO: search not specified, searching for targets.")
+        print("INFO: \'search\' not specified, searching for targets.")
     if not robot_ip:
-        print("WARNING: Robot IP address not specified. Using default.")
+        print("WARNING: Robot IP address not specified. Using default 10.5.1.2.")
         robot_ip = '10.5.1.2'
 
-
-
-
-
     if die > 0:
-        print("FATAL ERROR: unable to load vision configuration. Exiting.")
+        print("ERROR: Unable to load vision configuration. Exiting.")
         sys.exit(1)
 
     if debug == '1':
@@ -97,7 +94,7 @@ def run_config(cfg):
         search = True
 
     if debug:
-        print('INFO: debug set.')
+        print('INFO: Debug set.')
 
     green = {'green_upper': green_upper, 'green_lower': green_lower}
     calibration = {'green': green}
