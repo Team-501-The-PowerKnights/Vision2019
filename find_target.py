@@ -25,8 +25,8 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     angle = 1000
     valid_update = False
     img_copy = np.copy(img_orig)
-    lower_bound = np.array(calibration["green_lower"])
-    upper_bound = np.array(calibration["green_upper"])
+    lower_bound = np.array(calibration["green"]["green_lower"])
+    upper_bound = np.array(calibration["green"]["green_upper"])
     hsv = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
     mask = cv2.inrange(hsv, lower_bound, upper_bound)
     mask_copy = np.copy(mask)
