@@ -35,7 +35,7 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     if debug:
         cv2.imwrite("ImageOriginal.png", img_orig)
         cv2.imwrite("ImageOriginalMask.png", mask)
-        cv2.imwrite("ImageOriginalErodeandDilated.png", ErodeandDilate)
+        cv2.imwrite("ImageOriginalErodeandDilated.png", erode_and_diliate)
         cv2.imwrite("ImageOriginalMaskThreshold.png", mask_thresh)
     if search:
         valid, cnt = VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
