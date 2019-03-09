@@ -4,6 +4,7 @@ import manipulate_image as MI
 import validate_target as VT
 from util.stopwatch import stopwatch as SW
 
+
 def find_valids(img_orig, calibration, rect_cnt1, rect_cnt2):
     """
     Input: image from camera, calibration information, contours from generated rectangle

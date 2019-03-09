@@ -73,7 +73,7 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
     for i in range(len(goodContours) - 1):
         distancePairs.append(goodContours[i + 1] - goodContours[i])
     # find max distance
-    if len(distancePairs) > 0:
+    if len(distancePairs) > 0:  # if there's no pairs, it's gonna crash <3
         maxDistance = max(distancePairs)
         maxIndex = goodContours.index(maxDistance)
     if len(goodContours) < 2:
