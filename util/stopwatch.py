@@ -1,29 +1,32 @@
 import time
 
+
 class stopwatch:
-   """ utility function which provides a stopwatch 
-       var = stopwatch('name')
-       var.start()
-       var.get()
-   """
+    """ utility function which provides a stopwatch
+        var = stopwatch('name')
+        var.start()
+        var.get()
+    """
 
-   def __init__(self, name):
-       self.name = name
-       self.start_time = 0
-       self.get_time = 0
+    def __init__(self, name):
+        self.name = name
+        self.start_time = 0
+        self.get_time = 0
+        self.elapsed = 0
 
-   def start(self):
-       self.start_time = time.time()
-       self.elapsed = 0
-       return self.elapsed
+    def start(self):
+        self.start_time = time.time()
+        self.elapsed = 0
+        return self.elapsed
 
-   def get(self):
-       self.get_time = time.time()
-       self.elapsed = self.get_time - self.start_time
-       return self.elapsed
+    def get(self):
+        self.get_time = time.time()
+        self.elapsed = self.get_time - self.start_time
+        return self.elapsed
 
 
 """
+from util.stopwatch import stopwatch (as stopwatch)
 sw = stopwatch('test')
 sw.start()
 

@@ -1,44 +1,64 @@
 import cv2
-import numpy as np
 import time
 import sys
-sys.path.append('/usr/local/lib')
 import logging
-from datetime import datetime
-
-from util.config import runConfig
-from networktables import NetworkTables
+from util.config import run_config
+from util.stopwatch import stopwatch as SW
+from networktables import NetworkTables as NT
 import find_target as FT
+import socket
 
 logging.basicConfig(level=logging.DEBUG)
 
-os, camera_location, calibration, freqFramesNT, vertx, verty = runConfig(None)
-
-# Vision.angle (double)
-# Vision.locked (boolean)
-# Vision.count (integer)
-
+# we run the configuration globally because it's easier. it's not correct, but it's easier.
+os, camera_location, calibration, freqFramesNT, address = run_config(None)  # debug and search are keys in the calibration dict
 
 
 def main():
-    # initialize network tables
-    # initialize camera
-    # create rectangle shape representing target
-    # run main loop of vision program
-    pass
+    camera_table = nt_init(address)
+    cap = cap_init(camera_location)
+    # rect_cnt1, rect_cnt2 = create_rect()
+    run(cap, camera_table, calibration, freqFramesNT, (125,125), (125,125))
 
 
-def nt_init():
+def nt_init(robot_address):
     """
     Initialize network tables
-    :parameter None
+    :parameter robot address
     :return camera network table
     """
-    #NetworkTables.setIPAddress('10.5.1.141')
-    #NetworkTables.setClientMode()
-    #NetworkTables.initialize(server='10.5.1.141')
-    # port 1735
-    pass
+    bot_address_found = False
+    while not bot_address_found:
+        try:
+            robot_ip = None
+            robot_ip = socket.gethostbyname(robot_address)  # determine robot IP
+            if robot_ip is not None:
+                bot_address_found = True
+        except socket.gaierror:
+            print("WARNING: Unable to find robot IP Address.")
+            continue
+
+    nt_init = False
+    while not nt_init:
+        try:
+            NT.initialize(server=robot_ip)  # initialize client
+        except:
+            continue
+        try:
+            vision_table = NT.getTable('SmartDashboard')
+        except:
+            NT.stop()
+            NT.destroy()
+            continue
+        vision_table.putBoolean('connected', True)
+        pullback = vision_table.getBoolean('connected', None)
+        if pullback:
+            nt_init = True
+        else:
+            continue
+    else:
+        return vision_table
+
 
 
 def create_rect():
@@ -78,14 +98,17 @@ def create_rect():
     return cnt1, cnt2
 
 
-def nt_send(camera_table, Angle, validCount, validUpdate):
+def nt_send(camera_table, angle, valid_count, valid_update):
     """
     Send relevant data to the network table
     :param camera_table: camera network table
-    :param Angle: angle to target
-    :param validCount: number of valid updates we have found
-    :param validUpdate: boolean True if valid target found, false otherwise
+    :param angle: angle to target
+    :param valid_count: number of valid updates we have found
+    :param valid_update: boolean True if valid target found, false otherwise
     :return: None
+    # Vision.angle (double)
+    # Vision.locked (boolean)
+    # Vision.count (integer)
     """
     pass
 
@@ -96,10 +119,15 @@ def cap_init(camera_location):
     :param camera_location: what the camera url is
     :return: cap returned from cv2.VideoCapture
     """
-    pass
+    try:
+        cap = cv2.VideoCapture(eval(camera_location))
+        time.sleep(1)
+    except:
+        print("Exception on VideoCapture init. Dying")
+        sys.exit()
+    return cap
 
-
-def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
+def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     """
     Run the main vision algorithm on each camera frame and update network table appropriately
     :param cap: cap returned from cv2.VideoCapture
@@ -109,15 +137,35 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
     :param rect_cnt: contour of the rectangle we want to validate targets against
     :return: None
     """
-    pass
-    # initialize validCount and frame number
-    validCount = 0
+    valid_count = 0
     n = 0
-    # while cap is open
-        # read frame
-        # call findValids on frame
-        # update validCount
-        # if frame number greater than freqFramesNT send data to network table
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if ret:
+            try:
+                if calibration['debug']:
+                    timer_fv=SW('FV')
+                    timer_fv.start()
+                angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
+                if calibration['debug']:
+                    elapsed = timer_fv.get()
+                    print("find_valids took " + str(elapsed))
+                if valid_update:
+                    valid_count += 1
+                if n > freqFramesNT:
+                    nt_send(camera_table, angle, valid_count, valid_update)
+                    n = 0
+                else:
+                    n += 1
+            except:
+                print("WARNING: There was an error with find_valids. Continuing.")
+                continue
+        else:
+            print("WARNING: Unable to read frame. Continuing.")
+            continue
+    else:
+        print("ERROR: Capture is not opened. Ending program.")
+        sys.exit()
 
 
 if __name__ == "__main__":

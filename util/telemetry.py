@@ -19,18 +19,28 @@ sleep_time = 0.200  # time to wait between sending updates
 
 
 def main():
-    table = telemetry_init()
-    telemetry_run(table)
+    table = telemetry_init()  # looks up robot address and returns networktable
+    telemetry_run(table)  # sends telemetry
 
 
 def telemetry_init():
-    ROBOT = 'roborio-501-frc.local'  # set robot name
-    ROBOT_IP = socket.gethostbyname(ROBOT)  # determine robot IP
-    nt_init = False
+    robot = 'roborio-501-frc.local'  # set robot name
 
+    bot_address_found = False
+    while not bot_address_found:
+        try:
+            robot_ip = None
+            robot_ip = socket.gethostbyname(robot)  # determine robot IP
+            if robot_ip is not None:
+                bot_address_found = True
+        except socket.gaierror:
+            print("Unable to find robot IP Address.")
+            continue
+
+    nt_init = False
     while not nt_init:
         try:
-            NT.initialize(server=ROBOT_IP)  # initialize client
+            NT.initialize(server=robot_ip)  # initialize client
         except:
             continue
         try:

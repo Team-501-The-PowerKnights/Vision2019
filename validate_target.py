@@ -33,14 +33,17 @@ def sortArray(sorted_indices, array):
     return sorted
 
 
-def findValidTarget(image, mask, rect_cnt):
+def find_valid_target(mask, rect_cnt1, rect_cnt2):
     """
 
     :param image: frame to be analyzed
     :param mask: mask of thresholded hsv image
-    :param rect_cnt: contour of perfect target rectangle
+    :param rect_cnt1: contour of perfect target rectangle
+    :param rect_cnt2: contour of the other perfect target rectangle
     :return: valid: boolean, True if valid target, False otherwise
             cnt: list where first entry is the contour of target 1 and second entry is contour of target 2
+            cx: list of the center of mass for x of the two contours
+            cy: list of the center of mass for y of the two contours
     """
     # initialize variables
     numContours = 10
@@ -51,7 +54,7 @@ def findValidTarget(image, mask, rect_cnt):
     # check validity of contours by shape match
     goodContours = []
     for contour in biggestContours:
-        if isValidShape(contour, rect_cnt):
+        if isValidShape(contour, rect_cnt1, rect_cnt2):
             goodContours.append(contour)
     # get the center of mass for each valid contour
     xCOM = []
