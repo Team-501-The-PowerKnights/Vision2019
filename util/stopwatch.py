@@ -26,7 +26,7 @@ class stopwatch:
 
 
 """
-import util.stopwatch as stopwatch
+from util.stopwatch import stopwatch (as stopwatch)
 sw = stopwatch('test')
 sw.start()
 
