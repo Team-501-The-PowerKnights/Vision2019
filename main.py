@@ -64,11 +64,17 @@ def create_rect():
     background = np.zeros((350, 350, 3), np.uint8)
     rect1 = cv2.rectangle(background, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), (255, 255, 255), -1)
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), -14.5, 1)
-    cnt1 = cv2.warpAffine(rect1, m, (350, 350))
+    rect1_rotated = cv2.warpAffine(rect1, m, (350, 350))
+    ret, thresh = cv2.threshold(rect1_rotated, 127, 255, cv2.THRESH_BINARY)
+    image, contours, hierrchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnt2 = contours[0]
 
     rect2 = rect1
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), 14.5, 1)
-    cnt2 = cv2.warpAffine(rect2, m, (350, 350))
+    rect2_rotated = cv2.warpAffine(rect2, m, (350, 350))
+    ret, thresh = cv2.threshold(rect2_rotated, 127, 255, cv2.THRESH_BINARY)
+    image, contours, hierrchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnt2 = contours[0]
     return cnt1, cnt2
 
 
