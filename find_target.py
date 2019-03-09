@@ -5,7 +5,7 @@ import image_calculations as CI
 import validate_target as VT
 
 
-def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
+def find_valids(img_orig, calibration, rect_cnt1, rect_cnt2):
     """
     Input: image from camera, calibration information, contours from generated rectangle
     Output:
@@ -31,7 +31,7 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     mask = cv2.inrange(hsv, lower_bound, upper_bound)
     mask_copy = np.copy(mask)
     erode_and_diliate = MI.erodeAndDilate(mask_copy)
-    ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
+    ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
     if debug:
         cv2.imwrite("ImageOriginal.png", img_orig)
         cv2.imwrite("ImageOriginalMask.png", mask)
