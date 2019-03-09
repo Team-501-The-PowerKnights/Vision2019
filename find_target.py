@@ -10,11 +10,7 @@ def find_valids(img_orig, calibration, rect_cnt1, rect_cnt2):
     Input: image from camera, calibration information, contours from generated rectangle
     Output:
         angle -> float, angle from camera center to target center
-        distance -> float, distance to target
         validUpdate -> boolean, valid target found
-        mask_orig -> image, unmodified mask
-        cnt -> list of contours found for targets
-        BFR_image -> image with BFR rectangle drawn on it and crosshairs
 
     This function uses calibration information to create a mask of the target. It then
     finds valid targets comparing to the rectangle contours, calculates the angle to target center,
@@ -38,10 +34,8 @@ def find_valids(img_orig, calibration, rect_cnt1, rect_cnt2):
         cv2.imwrite("ImageOriginalErodeandDilated.png", erode_and_diliate)
         cv2.imwrite("ImageOriginalMaskThreshold.png", mask_thresh)
     if search:
-        valid, cnt = VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
+        valid, cnt, cx, cy = VT.find_valid_target(mask, rect_cnt1, rect_cnt2)
         if valid:
             valid_update = True
-            cnt1_center = IC.findCenter(cnt[0])
-            cnt2_center = IC.findCenter(cnt[1])
-            angle = IC.findAngle(img_orig, cnt1_center, cnt2_center)
+            angle = IC.findAngle(cx[0], cx[1])
     return angle, valid_update
