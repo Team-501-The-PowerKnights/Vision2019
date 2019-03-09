@@ -97,9 +97,9 @@ def run_config(cfg):
         print('INFO: Debug set.')
 
     green = {'green_upper': green_upper, 'green_lower': green_lower}
-    calibration = {'green': green}
+    calibration = {'green': green, 'debug': debug, 'search': search}
 
-    return os, camera, calibration, nt_update_frequency, debug, search, address
+    return os, camera, calibration, nt_update_frequency, address
 
 
 def write_cal(cal):

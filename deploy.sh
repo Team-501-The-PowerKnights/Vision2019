@@ -44,9 +44,9 @@ if [ -f util/.ssh/vision_rsa.pub ]; then
          fi
       done
    if [ "$code" = "connect" ]; then
-      echo "Cannot connect. Deploy failed."
+      echo -e "Cannot connect. Deploy failed.\a"
    elif [ "$code" = "fail" ]; then
-      echo "Deploy failed."
+      echo -e "Deploy failed.\a"
    elif [ "$code" = "good" ]; then
       echo "Successfully Deployed Vision Code."
    fi

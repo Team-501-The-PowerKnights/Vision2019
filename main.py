@@ -8,8 +8,9 @@ import find_target as FT
 import socket
 
 logging.basicConfig(level=logging.DEBUG)
+
 # we run the configuration globally because it's easier. it's not correct, but it's easier.
-os, camera_location, calibration, freqFramesNT, debug, search, address = run_config(None)
+os, camera_location, calibration, freqFramesNT, address = run_config(None)  # debug and search are keys in the calibration dict
 
 
 def main():
@@ -33,7 +34,7 @@ def nt_init(robot_address):
             if robot_ip is not None:
                 bot_address_found = True
         except socket.gaierror:
-            print("Unable to find robot IP Address.")
+            print("WARNING: Unable to find robot IP Address.")
             continue
 
     nt_init = False
@@ -68,13 +69,13 @@ def create_rect():
     pass
 
 
-def nt_send(camera_table, Angle, validCount, validUpdate):
+def nt_send(camera_table, angle, valid_count, valid_update):
     """
     Send relevant data to the network table
     :param camera_table: camera network table
-    :param Angle: angle to target
-    :param validCount: number of valid updates we have found
-    :param validUpdate: boolean True if valid target found, false otherwise
+    :param angle: angle to target
+    :param valid_count: number of valid updates we have found
+    :param valid_update: boolean True if valid target found, false otherwise
     :return: None
     # Vision.angle (double)
     # Vision.locked (boolean)
@@ -110,7 +111,7 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     """
     valid_count = 0
     n = 0
-    while(cap.isOpened()):
+    while cap.isOpened():
         ret, frame = cap.read()
         if ret:
             try:
@@ -123,11 +124,14 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
                 else:
                     n += 1
             except:
-                print("There was an error with find_valids. Continuing.")
+                print("WARNING: There was an error with find__valids. Continuing.")
+                continue
         else:
-            print("Unable to read frame. Continuing.")
+            print("WARNING: Unable to read frame. Continuing.")
+            continue
     else:
-        print("Capture is not opened. Ending program.")
+        print("ERROR: Capture is not opened. Ending program.")
+        sys.exit()
 
 
 if __name__ == "__main__":
