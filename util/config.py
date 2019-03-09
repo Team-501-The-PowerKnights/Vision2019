@@ -30,7 +30,7 @@ def run_config(cfg):
         nt_update_frequency = None
         debug = None
         search = None
-        robot_ip = None
+        address = None
     else:
         config = cfg
 
@@ -44,7 +44,7 @@ def run_config(cfg):
         nt_update_frequency = int(config['framerate']['nt_update_frequency'])
         debug = config['debug']['debug']
         search = config['search']['search']
-        robot_ip = config['robot']['ip']
+        address = config['robot']['address']
     except configparser.NoSectionError:
         print("WARNING: config.ini does not contain correct [sections] . see config.correct ")
     except configparser.NoOptionError:
@@ -76,9 +76,9 @@ def run_config(cfg):
         print("INFO: \'debug\' not specified, not debugging.")
     if not search:
         print("INFO: \'search\' not specified, searching for targets.")
-    if not robot_ip:
+    if not address:
         print("WARNING: Robot IP address not specified. Using default 10.5.1.2.")
-        robot_ip = '10.5.1.2'
+        address = '10.5.1.2'
 
     if die > 0:
         print("ERROR: Unable to load vision configuration. Exiting.")
@@ -99,7 +99,7 @@ def run_config(cfg):
     green = {'green_upper': green_upper, 'green_lower': green_lower}
     calibration = {'green': green}
 
-    return os, camera, calibration, nt_update_frequency, debug, search, robot_ip
+    return os, camera, calibration, nt_update_frequency, debug, search, address
 
 
 def write_cal(cal):

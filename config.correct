@@ -12,4 +12,4 @@ debug = 0
 [search]
 search = 1
 [robot]
-ip = 10.5.1.2
+address = roborio-501-frc.local

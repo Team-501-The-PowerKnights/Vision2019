@@ -1,43 +1,62 @@
 import cv2
-import numpy as np
 import time
 import sys
-sys.path.append('/usr/local/lib')
 import logging
-from datetime import datetime
-
-from util.config import runConfig
-from networktables import NetworkTables
+from util.config import run_config
+from networktables import NetworkTables as NT
 import find_target as FT
+import socket
 
 logging.basicConfig(level=logging.DEBUG)
-
-os, camera_location, calibration, freqFramesNT, vertx, verty = runConfig(None)
-
-# Vision.angle (double)
-# Vision.locked (boolean)
-# Vision.count (integer)
-
+# we run the configuration globally because it's easier. it's not correct, but it's easier.
+os, camera_location, calibration, freqFramesNT, debug, search, address = run_config(None)
 
 
 def main():
-    camera_table = nt_init()
+    camera_table = nt_init(address)
     cap = cap_init(camera_location)
     rect_cnt1, rect_cnt2 = create_rect()
     run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
 
 
-def nt_init():
+def nt_init(robot_address):
     """
     Initialize network tables
-    :parameter None
+    :parameter robot address
     :return camera network table
     """
-    #NetworkTables.setIPAddress('10.5.1.141')
-    #NetworkTables.setClientMode()
-    #NetworkTables.initialize(server='10.5.1.141')
-    # port 1735
-    pass
+    bot_address_found = False
+    while not bot_address_found:
+        try:
+            robot_ip = None
+            robot_ip = socket.gethostbyname(robot_address)  # determine robot IP
+            if robot_ip is not None:
+                bot_address_found = True
+        except socket.gaierror:
+            print("Unable to find robot IP Address.")
+            continue
+
+    nt_init = False
+    while not nt_init:
+        try:
+            NT.initialize(server=robot_ip)  # initialize client
+        except:
+            continue
+        try:
+            vision_table = NT.getTable('SmartDashboard')
+        except:
+            NT.stop()
+            NT.destroy()
+            continue
+        vision_table.putBoolean('connected', True)
+        pullback = vision_table.getBoolean('connected', None)
+        if pullback:
+            nt_init = True
+        else:
+            continue
+    else:
+        return vision_table
+
 
 def create_rect():
     """
@@ -57,6 +76,9 @@ def nt_send(camera_table, Angle, validCount, validUpdate):
     :param validCount: number of valid updates we have found
     :param validUpdate: boolean True if valid target found, false otherwise
     :return: None
+    # Vision.angle (double)
+    # Vision.locked (boolean)
+    # Vision.count (integer)
     """
     pass
 
@@ -74,7 +96,6 @@ def cap_init(camera_location):
         print("Exception on VideoCapture init. Dying")
         sys.exit()
     return cap
-
 
 
 def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
