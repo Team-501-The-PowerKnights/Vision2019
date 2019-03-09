@@ -20,6 +20,8 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     finds valid targets comparing to the rectangle contours, calculates the angle to target center,
     and provides graphical representations for future use.
     """
+    debug = calibration["debug"]
+    search = calibration["search"]
     angle = 1000
     valid_update = False
     img_copy = np.copy(img_orig)
@@ -30,16 +32,16 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     mask_copy = np.copy(mask)
     erode_and_diliate = MI.erodeAndDilate(mask_copy)
     ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
-    if calibration[debug] == 0:
+    if debug:
         cv2.imwrite("ImageOriginal.png", img_orig)
         cv2.imwrite("ImageOriginalMask.png", mask)
         cv2.imwrite("ImageOriginalErodeandDilated.png", ErodeandDilate)
         cv2.imwrite("ImageOriginalMaskThreshold.png", mask_thresh)
-    if calibration[search] == 1:
+    if search:
         valid, cnt=VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
         if valid:
             valid_update=True
-            cnt1_center=IC.findCenter(rect_cnt1)
-            cnt2_center=IC.findCenter(rect_cnt2)
+            cnt1_center=IC.findCenter(cnt[0])
+            cnt2_center=IC.findCenter(cnt[1])
             angle=IC.findAngle(img_orig, cnt1_center, cnt2_center)
     return angle, valid_update
