@@ -40,14 +40,40 @@ def nt_init():
     # port 1735
     pass
 
+
 def create_rect():
     """
-    Creates a rectangle and performs appropriate processing to provide a target
-    returns the contour object of the rectangle
-    :return the two contours of the rectangle we want to validate targets
-    against (returned as a tuple)
-    """
-    pass
+        Creates a rectangle and performs appropriate processing to provide a target
+        returns the contour object of the rectangle
+        :return the two contours of the rectangle we want to validate targets
+        against (returned as a tuple)
+        """
+    # Draw rectangles of the retro reflective tape (Find dimensions in the game manual)
+    # Camera dimensions: 320 x 240
+    # Rectangle dimensions: 40 x 110
+    width = 40
+    length = 110
+    img_width = 175
+    img_length = 175
+
+    top_left_x = int(img_width - width / 2)
+    top_left_y = int(img_length - length / 2)
+    bottom_right_x = int(img_width + width / 2)
+    bottom_right_y = int(img_length + length / 2)
+
+    background = np.zeros((350, 350, 3), np.uint8)
+    rect1 = cv2.rectangle(background, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), (255, 255, 255), -1)
+    m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), -14.5, 1)
+    cnt1 = cv2.warpAffine(rect1, m, (350, 350))
+
+    rect2 = rect1
+    m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), 14.5, 1)
+    cnt2 = cv2.warpAffine(rect2, m, (350, 350))
+    return cnt1, cnt2
+
+
+cv2.imshow("image", create_rect())
+k = cv2.waitKey(0)
 
 
 def nt_send(camera_table, Angle, validCount, validUpdate):
@@ -71,7 +97,6 @@ def cap_init(camera_location):
     pass
 
 
-
 def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
     """
     Run the main vision algorithm on each camera frame and update network table appropriately
@@ -83,7 +108,7 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
     :return: None
     """
     pass
-    # intialize validCount and frame number
+    # initialize validCount and frame number
     validCount = 0
     n = 0
     # while cap is open
