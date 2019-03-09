@@ -16,7 +16,7 @@ def erodeAndDilate(img):
     :param img: the image frame mask being analyzed
     :return: and eroded and dilated image
     """
-    kernel = np.ones((5, 5), np.unit8)
+    kernel = np.ones((5, 5), np.uint8)
     erosion = cv2.erode(img, kernel, iterations=1)
     erosion_and_dilation = cv2.dilate(erosion, kernel, iterations=1)
     return erosion_and_dilation

@@ -3,6 +3,7 @@ import time
 import sys
 import logging
 from util.config import run_config
+from util.stopwatch import stopwatch as SW
 from networktables import NetworkTables as NT
 import find_target as FT
 import socket
@@ -16,8 +17,8 @@ os, camera_location, calibration, freqFramesNT, address = run_config(None)  # de
 def main():
     camera_table = nt_init(address)
     cap = cap_init(camera_location)
-    rect_cnt1, rect_cnt2 = create_rect()
-    run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
+    # rect_cnt1, rect_cnt2 = create_rect()
+    run(cap, camera_table, calibration, freqFramesNT, (125,125), (125,125))
 
 
 def nt_init(robot_address):
@@ -115,7 +116,13 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
         ret, frame = cap.read()
         if ret:
             try:
+                if calibration['debug']:
+                    timer_fv=SW('FV')
+                    timer_fv.start()
                 angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
+                if calibration['debug']:
+                    elapsed = timer_fv.get()
+                    print("find_valids took " + str(elapsed))
                 if valid_update:
                     valid_count += 1
                 if n > freqFramesNT:
@@ -124,7 +131,7 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
                 else:
                     n += 1
             except:
-                print("WARNING: There was an error with find__valids. Continuing.")
+                print("WARNING: There was an error with find_valids. Continuing.")
                 continue
         else:
             print("WARNING: Unable to read frame. Continuing.")
