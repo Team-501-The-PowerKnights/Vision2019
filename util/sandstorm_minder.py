@@ -3,8 +3,8 @@ import socket
 import subprocess
 
 def main():
-    nt_init("roborio-501-frc.local")
-    sandstorm(nt_init("roborio-501-frc.local"))
+    network_table = nt_init("roborio-501-frc.local")
+    sandstorm(network_table)
 
 def nt_init(robot_address):
     """
