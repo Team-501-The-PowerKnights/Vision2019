@@ -5,7 +5,7 @@ import image_calculations as CI
 import validate_target as VT
 
 
-def findValids(img_orig, calibration, rect_cnt):
+def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
     """
     Input: image from camera, calibration information, contours from generated rectangle
     Output:
@@ -20,11 +20,28 @@ def findValids(img_orig, calibration, rect_cnt):
     finds valid targets comparing to the rectangle contours, calculates the angle to target center,
     and provides graphical representations for future use.
     """
-    # initialize variables
-    # convert image into HSV
-    # create mask with lower and upper hsv bounds
-    # Clean up mask with dilate and erode and threshold
-    # if debug: write original frame, original mask, eroded and dilated mask, and mask threshold
-    # if search: call findValidTarget
-    # if valid: update validUpdate, find angle to target, find distance to target
-    pass
+    debug = calibration["debug"]
+    search = calibration["search"]
+    angle = 1000
+    valid_update = False
+    img_copy = np.copy(img_orig)
+    lower_bound = np.array(calibration["green"]["green_lower"])
+    upper_bound = np.array(calibration["green"]["green_upper"])
+    hsv = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
+    mask = cv2.inrange(hsv, lower_bound, upper_bound)
+    mask_copy = np.copy(mask)
+    erode_and_diliate = MI.erodeAndDilate(mask_copy)
+    ret, mask_thresh = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY))
+    if debug:
+        cv2.imwrite("ImageOriginal.png", img_orig)
+        cv2.imwrite("ImageOriginalMask.png", mask)
+        cv2.imwrite("ImageOriginalErodeandDilated.png", erode_and_diliate)
+        cv2.imwrite("ImageOriginalMaskThreshold.png", mask_thresh)
+    if search:
+        valid, cnt = VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
+        if valid:
+            valid_update = True
+            cnt1_center = IC.findCenter(cnt[0])
+            cnt2_center = IC.findCenter(cnt[1])
+            angle = IC.findAngle(img_orig, cnt1_center, cnt2_center)
+    return angle, valid_update
