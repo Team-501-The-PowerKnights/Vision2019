@@ -72,10 +72,6 @@ def create_rect():
     return cnt1, cnt2
 
 
-cv2.imshow("image", create_rect())
-k = cv2.waitKey(0)
-
-
 def nt_send(camera_table, Angle, validCount, validUpdate):
     """
     Send relevant data to the network table
