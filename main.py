@@ -21,11 +21,10 @@ os, camera_location, calibration, freqFramesNT, vertx, verty = runConfig(None)
 
 
 def main():
-    # initialize network tables
-    # initialize camera
-    # create rectangle shape representing target
-    # run main loop of vision program
-    pass
+    camera_table = nt_init()
+    cap = cap_init(camera_location)
+    rect_cnt1, rect_cnt2 = create_rect()
+    run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
 
 
 def nt_init():
@@ -68,11 +67,17 @@ def cap_init(camera_location):
     :param camera_location: what the camera url is
     :return: cap returned from cv2.VideoCapture
     """
-    pass
+    try:
+        cap = cv2.VideoCapture(eval(camera_location))
+        time.sleep(1)
+    except:
+        print("Exception on VideoCapture init. Dying")
+        sys.exit()
+    return cap
 
 
 
-def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
+def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     """
     Run the main vision algorithm on each camera frame and update network table appropriately
     :param cap: cap returned from cv2.VideoCapture
@@ -82,15 +87,26 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt):
     :param rect_cnt: contour of the rectangle we want to validate targets against
     :return: None
     """
-    pass
-    # intialize validCount and frame number
-    validCount = 0
+    valid_count = 0
     n = 0
-    # while cap is open
-        # read frame
-        # call findValids on frame
-        # update validCount
-        # if frame number greater than freqFramesNT send data to network table
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret:
+            try:
+                angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
+                if valid_update:
+                    valid_count += 1
+                if n > freqFramesNT:
+                    nt_send(camera_table, angle, valid_count, valid_update)
+                    n = 0
+                else:
+                    n += 1
+            except:
+                print("There was an error with find_valids. Continuing.")
+        else:
+            print("Unable to read frame. Continuing.")
+    else:
+        print("Capture is not opened. Ending program.")
 
 
 if __name__ == "__main__":
