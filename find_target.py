@@ -38,10 +38,10 @@ def findValids(img_orig, calibration, rect_cnt1, rect_cnt2):
         cv2.imwrite("ImageOriginalErodeandDilated.png", ErodeandDilate)
         cv2.imwrite("ImageOriginalMaskThreshold.png", mask_thresh)
     if search:
-        valid, cnt=VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
+        valid, cnt = VT.findValidTarget(img_orig, mask, rect_cnt1, rect_cnt2)
         if valid:
-            valid_update=True
-            cnt1_center=IC.findCenter(cnt[0])
-            cnt2_center=IC.findCenter(cnt[1])
-            angle=IC.findAngle(img_orig, cnt1_center, cnt2_center)
+            valid_update = True
+            cnt1_center = IC.findCenter(cnt[0])
+            cnt2_center = IC.findCenter(cnt[1])
+            angle = IC.findAngle(img_orig, cnt1_center, cnt2_center)
     return angle, valid_update
