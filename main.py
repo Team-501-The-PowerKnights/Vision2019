@@ -67,7 +67,7 @@ def create_rect():
     rect1_rotated = cv2.warpAffine(rect1, m, (350, 350))
     ret, thresh = cv2.threshold(rect1_rotated, 127, 255, cv2.THRESH_BINARY)
     image, contours, hierrchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cnt2 = contours[0]
+    cnt1 = contours[0]
 
     rect2 = rect1
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), 14.5, 1)
