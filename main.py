@@ -7,6 +7,7 @@ from util.stopwatch import stopwatch as SW
 from networktables import NetworkTables as NT
 import find_target as FT
 import socket
+import numpy as np
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,9 +18,8 @@ os, camera_location, calibration, freqFramesNT, address = run_config(None)  # de
 def main():
     camera_table = nt_init(address)
     cap = cap_init(camera_location)
-    # rect_cnt1, rect_cnt2 = create_rect()
-    run(cap, camera_table, calibration, freqFramesNT, (125,125), (125,125))
-
+    rect_cnt1, rect_cnt2 = create_rect(calibration['debug'])
+    run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
 
 def nt_init(robot_address):
     """
@@ -61,7 +61,7 @@ def nt_init(robot_address):
 
 
 
-def create_rect():
+def create_rect(debug):
     """
         Creates a rectangle and performs appropriate processing to provide a target
         returns the contour object of the rectangle
@@ -71,6 +71,9 @@ def create_rect():
     # Draw rectangles of the retro reflective tape (Find dimensions in the game manual)
     # Camera dimensions: 320 x 240
     # Rectangle dimensions: 40 x 110
+    if debug:
+        timer_rect = SW('rect')
+        timer_rect.start()
     width = 40
     length = 110
     img_width = 175
@@ -86,15 +89,20 @@ def create_rect():
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), -14.5, 1)
     rect1_rotated = cv2.warpAffine(rect1, m, (350, 350))
     ret, thresh = cv2.threshold(rect1_rotated, 127, 255, cv2.THRESH_BINARY)
-    image, contours, hierrchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY);
+    contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnt1 = contours[0]
 
     rect2 = rect1
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), 14.5, 1)
     rect2_rotated = cv2.warpAffine(rect2, m, (350, 350))
     ret, thresh = cv2.threshold(rect2_rotated, 127, 255, cv2.THRESH_BINARY)
-    image, contours, hierrchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY);
+    contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnt2 = contours[0]
+    if debug:
+        elapsed = timer_rect.get()
+        print('DEBUG: rectangles took ' + str(elapsed))
     return cnt1, cnt2
 
 
@@ -142,24 +150,24 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     while cap.isOpened():
         ret, frame = cap.read()
         if ret:
-            try:
-                if calibration['debug']:
-                    timer_fv=SW('FV')
-                    timer_fv.start()
-                angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
-                if calibration['debug']:
-                    elapsed = timer_fv.get()
-                    print("find_valids took " + str(elapsed))
-                if valid_update:
-                    valid_count += 1
-                if n > freqFramesNT:
-                    nt_send(camera_table, angle, valid_count, valid_update)
-                    n = 0
-                else:
-                    n += 1
-            except:
-                print("WARNING: There was an error with find_valids. Continuing.")
-                continue
+            # try:
+            if calibration['debug']:
+                timer_fv=SW('FV')
+                timer_fv.start()
+            angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
+            if calibration['debug']:
+                elapsed = timer_fv.get()
+                print("DEBUG: find_valids took " + str(elapsed))
+            if valid_update:
+                valid_count += 1
+            if n > freqFramesNT:
+                nt_send(camera_table, angle, valid_count, valid_update)
+                n = 0
+            else:
+                n += 1
+            # except:
+            #    print("WARNING: There was an error with find_valids. Continuing.")
+            #    continue
         else:
             print("WARNING: Unable to read frame. Continuing.")
             continue

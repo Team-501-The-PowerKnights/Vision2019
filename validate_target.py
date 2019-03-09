@@ -48,7 +48,7 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
     # initialize variables
     numContours = 10
     # find contours
-    _, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # take 10 longest contours
     biggestContours = nlargest(numContours, contours, key=len)
     # check validity of contours by shape match
@@ -73,8 +73,9 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
     for i in range(len(goodContours) - 1):
         distancePairs.append(goodContours[i + 1] - goodContours[i])
     # find max distance
-    maxDistance = max(distancePairs)
-    maxIndex = goodContours.index(maxDistance)
+    if len(distancePairs) > 0:
+        maxDistance = max(distancePairs)
+        maxIndex = goodContours.index(maxDistance)
     if len(goodContours) < 2:
         cnt = [0, 0]
         valid = False
@@ -86,6 +87,3 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
         cx = [xCOM[maxIndex], xCOM[maxIndex + 1]]
         cy = [yCOM[maxIndex], yCOM[maxIndex + 1]]
     return valid, cnt, cx, cy
-
-
-
