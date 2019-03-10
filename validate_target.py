@@ -51,39 +51,35 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # take 10 longest contours
     biggestContours = nlargest(numContours, contours, key=len)
-    # check validity of contours by shape match
+    # get area of each contour
+    areas = []
     goodContours = []
-    for contour in biggestContours:
-        if isValidShape(contour, rect_cnt1, rect_cnt2):
-            goodContours.append(contour)
-    # get the center of mass for each valid contour
-    xCOM = []
-    yCOM = []
-    for contour in goodContours:
-        cx, cy = IC.findCenter(contour)
-        xCOM.append(cx)
-        yCOM.append(cy)
-    # order contours from left to right
-    sorted_indices = np.argsort(xCOM)
-    xCOM = sortArray(sorted_indices, xCOM)
-    yCOM = sortArray(sorted_indices, yCOM)
-    goodContours = sortArray(sorted_indices, goodContours)
-    # get distance between each set of pairs
-    distancePairs = []
-    for i in range(len(xCOM) - 1):
-        distancePairs.append(xCOM[i + 1] - xCOM[i])
-    # find max distance
-    if len(distancePairs) > 0:  # if there's no pairs, it's gonna crash <3
-        maxDistance = max(distancePairs)
-        maxIndex = distancePairs.index(maxDistance)
+    if len(biggestContours) > 1:
+        for cnt in biggestContours:
+            areas.append(cv2.contourArea(cnt))
+        sorted_indices = np.argsort(areas)
+        max_index = np.where(sorted_indices == len(sorted_indices) - 1)[0][0]
+        second_index = np.where(sorted_indices == len(sorted_indices) - 2)[0][0]
+        biggestContours = [biggestContours[max_index], biggestContours[second_index]]
+        # check validity of contours by shape match
+        for contour in biggestContours:
+            if isValidShape(contour, rect_cnt1, rect_cnt2):
+                goodContours.append(contour)
+        # get the center of mass for each valid contour
+        xCOM = []
+        yCOM = []
+        for contour in goodContours:
+            cx, cy = IC.findCenter(contour)
+            xCOM.append(cx)
+            yCOM.append(cy)
     if len(goodContours) < 2:
         cnt = [0, 0]
         valid = False
         cx = [0, 0]
         cy = [0, 0]
     else:
-        cnt = [goodContours[maxIndex], goodContours[maxIndex + 1]]
+        cnt = goodContours
         valid = True
-        cx = [xCOM[maxIndex], xCOM[maxIndex + 1]]
-        cy = [yCOM[maxIndex], yCOM[maxIndex + 1]]
+        cx = xCOM
+        cy = yCOM
     return valid, cnt, cx, cy
