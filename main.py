@@ -118,8 +118,9 @@ def nt_send(camera_table, angle, valid_count, valid_update):
     Vision.locked (boolean)
     Vision.count (integer)
     """
-    #
-    pass
+    camera_table.putDouble(angle)
+    camera_table.putBoolean(valid_update)
+    camera_table.putInt(valid_count)
 
 
 def cap_init(camera_location):
