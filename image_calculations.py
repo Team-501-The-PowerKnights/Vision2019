@@ -40,7 +40,7 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    M = cv2.moments(c)
+    M = cv2.moments(cnt)
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
     return cX, cY
