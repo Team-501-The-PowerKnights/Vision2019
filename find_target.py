@@ -41,13 +41,17 @@ def find_valids(img_orig, calibration, rect_cnt1, rect_cnt2):
     erode_and_diliate = MI.erodeAndDilate(mask)
     if debug:
         elapsed = timer_ft.get()
-        print("DEBUG: erode_and_dilate took "+ str(elapsed))
+        print("DEBUG: erode_and_dilate took " + str(elapsed))
     if debug:
         timer_ft.start()
     ret, mask_thresh = cv2.threshold(erode_and_diliate, 127, 255, cv2.THRESH_BINARY)
     if debug:
         elapsed = timer_ft.get()
-        print("DEBUG: threshold took "+ str(elapsed))
+        print("DEBUG: threshold took " + str(elapsed))
+    if debug:
+        cv2.imwrite("home/linaro/test_images/image_orig.png", img_orig)
+        cv2.imwrite("home/linaro/test_images/mask.png", mask)
+        cv2.imwrite("home/linaro/test_images/erode_and_diliate.png", erode_and_diliate)
     if search:
         valid, cnt, cx, cy = VT.find_valid_target(mask_thresh, rect_cnt1, rect_cnt2)
         if valid:

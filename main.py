@@ -114,10 +114,11 @@ def nt_send(camera_table, angle, valid_count, valid_update):
     :param valid_count: number of valid updates we have found
     :param valid_update: boolean True if valid target found, false otherwise
     :return: None
-    # Vision.angle (double)
-    # Vision.locked (boolean)
-    # Vision.count (integer)
+    Vision.angle (double)
+    Vision.locked (boolean)
+    Vision.count (integer)
     """
+    #
     pass
 
 
