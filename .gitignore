@@ -7,3 +7,6 @@
 .DS_Store
 *.DS_Store
 /.Ds_Store
+/.ini
+*.ini
+.ini
