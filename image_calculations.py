@@ -26,7 +26,7 @@ def findAngle(cx1, cx2):
     """
     camera_FOV = 49.6
     cx = (cx1 + cx2) / 2
-    dimensions = img.shape
+    dimensions = img.shape  # Returns rows, columns, and channels
     h = dimensions[0]
     width = dimensions[1]
     offset = (width / 2) - cx
