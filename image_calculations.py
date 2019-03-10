@@ -13,7 +13,7 @@ from collections import Counter
 camera_res = [320, 240]
 
 
-def findAngle(cx1, cx2):
+def findAngle(img_orig, cx1, cx2):
     """
     Input:
         image
@@ -26,7 +26,7 @@ def findAngle(cx1, cx2):
     """
     camera_FOV = 49.6
     cx = (cx1 + cx2) / 2
-    dimensions = img.shape
+    dimensions = img_orig.shape
     h = dimensions[0]
     width = dimensions[1]
     offset = (width / 2) - cx

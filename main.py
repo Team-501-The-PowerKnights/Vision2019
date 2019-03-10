@@ -159,6 +159,7 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
             if calibration['debug']:
                 elapsed = timer_fv.get()
                 print("DEBUG: find_valids took " + str(elapsed))
+                print("DEBUG: angle: " + str(angle) + " valid_update: " + str(valid_update) + " valid_count: " + str(valid_count) )
             if valid_update:
                 valid_count += 1
             if n > freqFramesNT:

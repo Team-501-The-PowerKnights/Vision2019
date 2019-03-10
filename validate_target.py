@@ -70,12 +70,12 @@ def find_valid_target(mask, rect_cnt1, rect_cnt2):
     goodContours = sortArray(sorted_indices, goodContours)
     # get distance between each set of pairs
     distancePairs = []
-    for i in range(len(goodContours) - 1):
-        distancePairs.append(goodContours[i + 1] - goodContours[i])
+    for i in range(len(xCOM) - 1):
+        distancePairs.append(xCOM[i + 1] - xCOM[i])
     # find max distance
     if len(distancePairs) > 0:  # if there's no pairs, it's gonna crash <3
         maxDistance = max(distancePairs)
-        maxIndex = goodContours.index(maxDistance)
+        maxIndex = distancePairs.index(maxDistance)
     if len(goodContours) < 2:
         cnt = [0, 0]
         valid = False
