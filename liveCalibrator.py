@@ -17,7 +17,7 @@ License: Free As In Beer
 
 import cv2
 import numpy as np
-from config import runConfig, write_cal
+from util.config import run_config, write_cal
 
 
 def nothing(x):
@@ -64,7 +64,7 @@ def init_window(calibration):
 
 
 def main():
-    _, cam, calibration, _, _, _ = runConfig(None)
+    _, cam, calibration, _, _ = run_config(None)
     cap = init_capture(cam)
     switch = init_window(calibration)
     run(cap, switch, calibration)
