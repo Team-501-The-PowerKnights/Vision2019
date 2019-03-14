@@ -97,7 +97,7 @@ def create_rect(debug):
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), 14.5, 1)
     rect2_rotated = cv2.warpAffine(rect2, m, (350, 350))
     ret, thresh = cv2.threshold(rect2_rotated, 127, 255, cv2.THRESH_BINARY)
-    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY);
+    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
     contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnt2 = contours[0]
     if debug:
