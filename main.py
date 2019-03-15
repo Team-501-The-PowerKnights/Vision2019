@@ -89,7 +89,7 @@ def create_rect(debug):
     m = cv2.getRotationMatrix2D((350 / 2, 350 / 2), -14.5, 1)
     rect1_rotated = cv2.warpAffine(rect1, m, (350, 350))
     ret, thresh = cv2.threshold(rect1_rotated, 127, 255, cv2.THRESH_BINARY)
-    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY);
+    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
     contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnt1 = contours[0]
 
@@ -118,7 +118,9 @@ def nt_send(camera_table, angle, valid_count, valid_update):
     # Vision.locked (boolean)
     # Vision.count (integer)
     """
-    pass
+    camera_table.putDouble("Vision.angle", angle)
+    camera_table.putBoolean("Vision.locked", valid_update)
+    camera_table.putInt("Vision.count", valid_count)
 
 
 def cap_init(camera_location):
