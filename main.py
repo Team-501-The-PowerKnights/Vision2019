@@ -114,10 +114,11 @@ def nt_send(camera_table, angle, valid_count, valid_update):
     :param valid_count: number of valid updates we have found
     :param valid_update: boolean True if valid target found, false otherwise
     :return: None
-    # Vision.angle (double)
-    # Vision.locked (boolean)
-    # Vision.count (integer)
+    Vision.angle (double)
+    Vision.locked (boolean)
+    Vision.count (integer)
     """
+
     camera_table.putDouble("Vision.angle", angle)
     camera_table.putBoolean("Vision.locked", valid_update)
     camera_table.putInt("Vision.count", valid_count)
@@ -152,24 +153,25 @@ def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     while cap.isOpened():
         ret, frame = cap.read()
         if ret:
-            # try:
-            if calibration['debug']:
-                timer_fv=SW('FV')
-                timer_fv.start()
-            angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
-            if calibration['debug']:
-                elapsed = timer_fv.get()
-                print("DEBUG: find_valids took " + str(elapsed))
-            if valid_update:
-                valid_count += 1
-            if n > freqFramesNT:
-                nt_send(camera_table, angle, valid_count, valid_update)
-                n = 0
-            else:
-                n += 1
-            # except:
-            #    print("WARNING: There was an error with find_valids. Continuing.")
-            #    continue
+            try:
+                if calibration['debug']:
+                    timer_fv=SW('FV')
+                    timer_fv.start()
+                angle, valid_update = FT.find_valids(frame, calibration, rect_cnt1, rect_cnt2)
+                if calibration['debug']:
+                    elapsed = timer_fv.get()
+                    print("DEBUG: find_valids took " + str(elapsed))
+                    print("DEBUG: angle: " + str(angle) + " valid_update: " + str(valid_update) + " valid_count: " + str(valid_count) )
+                if valid_update:
+                    valid_count += 1
+                if n > freqFramesNT:
+                    nt_send(camera_table, angle, valid_count, valid_update)
+                    n = 0
+                else:
+                    n += 1
+            except:
+                print("WARNING: There was an error with find_valids. Continuing.")
+                continue
         else:
             print("WARNING: Unable to read frame. Continuing.")
             continue

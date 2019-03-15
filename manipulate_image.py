@@ -31,11 +31,10 @@ def drawLine2Target(img, cx, cy):
     :return: image with a line drawn to target
     """
     dimensions = img.shape
-    centery = dimensions[0] / 2
-    centerx = dimensions[1] / 2
+    centery = int(dimensions[0] / 2)
+    centerx = int(dimensions[1] / 2)
     img_line = cv2.line(img, (centery, centerx), (cx, cy), (255, 0, 0), 2)
     return img_line
-
 
 def drawCrossHairs(img):
     """

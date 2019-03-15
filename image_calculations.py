@@ -13,7 +13,7 @@ from collections import Counter
 camera_res = [320, 240]
 
 
-def findAngle(cx1, cx2):
+def findAngle(img_orig, cx1, cx2):
     """
     Input:
         image
@@ -26,7 +26,7 @@ def findAngle(cx1, cx2):
     """
     camera_FOV = 49.6
     cx = (cx1 + cx2) / 2
-    dimensions = img.shape
+    dimensions = img_orig.shape  # Returns rows, columns, and channels
     h = dimensions[0]
     width = dimensions[1]
     offset = (width / 2) - cx
@@ -40,7 +40,7 @@ def findCenter(cnt):
     :param cnt: the contour of the target
     :return: the center x coordinate (cx), the center y coordinate (cy)
     """
-    M = cv2.moments(c)
+    M = cv2.moments(cnt)
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
     return cX, cY
