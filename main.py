@@ -21,6 +21,7 @@ def main():
     rect_cnt1, rect_cnt2 = create_rect(calibration['debug'])
     run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
 
+
 def nt_init(robot_address):
     """
     Initialize network tables
@@ -58,7 +59,6 @@ def nt_init(robot_address):
             continue
     else:
         return vision_table
-
 
 
 def create_rect(debug):
@@ -137,6 +137,7 @@ def cap_init(camera_location):
         print("Exception on VideoCapture init. Dying")
         sys.exit()
     return cap
+
 
 def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     """
