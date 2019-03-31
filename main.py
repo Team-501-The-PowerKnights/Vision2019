@@ -11,8 +11,8 @@ import numpy as np
 
 logging.basicConfig(level=logging.DEBUG)
 
-# we run the configuration globally because it's easier. it's not correct, but it's easier.
-os, camera_location, calibration, freqFramesNT, address = run_config(None)  # debug and search are keys in the calibration dict
+# the parameters passed into run_config are the configuration and the filename.
+os, camera_location, calibration, freqFramesNT, address = run_config(None, None)
 
 
 def main():
@@ -20,6 +20,7 @@ def main():
     cap = cap_init(camera_location)
     rect_cnt1, rect_cnt2 = create_rect(calibration['debug'])
     run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2)
+
 
 def nt_init(robot_address):
     """
@@ -33,9 +34,10 @@ def nt_init(robot_address):
             robot_ip = None
             robot_ip = socket.gethostbyname(robot_address)  # determine robot IP
             if robot_ip is not None:
+                print("INFO: Found robot at " + robot_ip)
                 bot_address_found = True
         except socket.gaierror:
-            print("WARNING: Unable to find robot IP Address.")
+            print("WARNING: Unable to find robot IP Address.")  # this will loop until we find the robot
             continue
 
     nt_init = False
@@ -43,7 +45,7 @@ def nt_init(robot_address):
         try:
             NT.initialize(server=robot_ip)  # initialize client
         except:
-            continue
+            continue  # this will loop until we connect to the robot
         try:
             vision_table = NT.getTable('SmartDashboard')
         except:
@@ -58,7 +60,6 @@ def nt_init(robot_address):
             continue
     else:
         return vision_table
-
 
 
 def create_rect(debug):
@@ -119,9 +120,9 @@ def nt_send(camera_table, angle, valid_count, valid_update):
     Vision.count (integer)
     """
 
-    camera_table.putDouble("Vision.angle", angle)
+    camera_table.putNumber("Vision.angle", angle)
     camera_table.putBoolean("Vision.locked", valid_update)
-    camera_table.putInt("Vision.count", valid_count)
+    camera_table.putNumber("Vision.count", valid_count)
 
 
 def cap_init(camera_location):
@@ -137,6 +138,7 @@ def cap_init(camera_location):
         print("Exception on VideoCapture init. Dying")
         sys.exit()
     return cap
+
 
 def run(cap, camera_table, calibration, freqFramesNT, rect_cnt1, rect_cnt2):
     """

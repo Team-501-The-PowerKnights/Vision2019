@@ -2,7 +2,7 @@ import sys
 import configparser
 
 
-def run_config(cfg):
+def run_config(cfg, file):
     """
     reads a  configuration file (config.ini) in standard format.
     [header]
@@ -16,12 +16,14 @@ def run_config(cfg):
 
     if cfg is None:
         print("INFO: reading configuration from config.ini")
-        # changed below to "read_file" as we WANT it to throw an exception when the file does not exist
+
+        if file is None:
+            file = 'config.ini'  # hackish fallback
         try:
-            config.read_file(open('config.ini'))
+            config.read_file(open(file))
         except FileNotFoundError:
             print('ERROR: config.ini not found.')
-            return
+            sys.exit(1)
 
         os = None
         camera = None
@@ -109,7 +111,7 @@ def write_cal(cal):
     config.set('mask', 'green_lower', ','.join(cal['green']['green_lower']))
 
     print('Validating configuration and writing to disk.')
-    run_config(config)
+    run_config(config, None)
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
     return True
