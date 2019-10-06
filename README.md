@@ -24,4 +24,5 @@ We highly suggest holding classes for your students in usage of unix commandline
 SSH Security:
 
 The private and public key pair for deployment are included in this repo for our uses.
-:red_circle:  DO NOT, UNDER ANY CIRCUMSTANCES, USE THIS KEY ON AN INTERNET-CONNECTED SYSTEM.
+
+:red_circle: DO NOT, UNDER ANY CIRCUMSTANCES, USE THIS KEY ON AN INTERNET-CONNECTED SYSTEM. :red_circle:
