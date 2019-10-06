@@ -64,7 +64,7 @@ def init_window(calibration):
 
 
 def main():
-    _, cam, calibration, _, _ = run_config(None)
+    _, cam, calibration, _, _ = run_config(None, 'config.ini')
     cap = init_capture(cam)
     switch = init_window(calibration)
     run(cap, switch, calibration)
