@@ -3,7 +3,7 @@
 ### must be run from the root of the vision repository
 
 if [ -f util/.ssh/vision_rsa.pub ]; then
-   echo "Deploying Vision Code to Raspberry Pi..."
+   echo "Vision public key found."
    list=$(find $PWD -type f | grep -vE ".idea|.git|__pycache__")
    dirs=$(find . -type d |grep -vE ".git|.idea|__pycache__"| sed 's/^\.$//g; s/\.\///g')
    pwd=$(pwd)
@@ -51,5 +51,5 @@ if [ -f util/.ssh/vision_rsa.pub ]; then
       echo "Successfully Deployed Vision Code."
    fi
 else
-   echo "Unable to find ssh keys to deploy. Are you in the root of the vision repository?"
+   echo "Vision public key not found. Are you in the root of the vision repository?"
 fi
