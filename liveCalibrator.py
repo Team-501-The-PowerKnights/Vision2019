@@ -26,6 +26,8 @@ def nothing(x):
 
 def init_capture(cam):
     try:
+        if len(cam) == 1:
+            print("INFO: using local camera device")
         cap = cv2.VideoCapture(eval(cam))
         return cap
     except:
